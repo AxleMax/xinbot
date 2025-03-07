@@ -19,7 +19,7 @@ jobs:
             ext: tar.gz
           - os: windows-latest
             suffix: win
-            ext: exe
+            ext: zip
 
     steps:
       - uses: actions/checkout@v4
@@ -76,4 +76,4 @@ jobs:
             release/xinbot-win.*
             release/xinbot-linux.*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.xinbot_TOKEN }}
