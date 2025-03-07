@@ -42,12 +42,13 @@ jobs:
           else
             pkg . --targets node18-linux-x64 --output $OUTPUT_DIR/xinbot
           fi
-        shell: bash  
+        shell: bash
 
       - name: Compress Executable
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            zip -j build/xinbot-win.zip build/xinbot.exe
+            # 调用 PowerShell 压缩
+            pwsh -Command "Compress-Archive -Path 'build/xinbot.exe' -DestinationPath 'build/xinbot-win.zip'"
           else
             tar -czvf build/xinbot-linux.tar.gz -C build xinbot
           fi
