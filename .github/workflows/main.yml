@@ -33,12 +33,13 @@ jobs:
 
       - name: Build Executable
         run: |
+          # 使用 pkg 打包
           pkg . --targets node18-${{ matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64' }} --output build/xinbot
         shell: bash
 
       - name: Compress Executable
         run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
             # Windows 环境压缩为 zip 文件
             zip -r build/xinbot-win.zip build/xinbot*
           else
@@ -54,3 +55,28 @@ jobs:
           path: |
             build/xinbot-win.zip
             build/xinbot-linux.tar.gz
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: xinbot-win
+          path: release/
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: xinbot-linux
+          path: release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.xinbot_TOKEN }}
