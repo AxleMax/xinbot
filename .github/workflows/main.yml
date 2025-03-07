@@ -1,0 +1,68 @@
+name: Build and Release EXE
+
+on:
+  push:
+    tags:
+      - "v*"  # 仅当你推送 v1.0.0 这样的 tag 时触发
+
+jobs:
+  build:
+    name: Build EXE and Binary
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node_version: [18]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install pkg
+        run: npm install -g pkg
+
+      - name: Build Executable
+        run: |
+          pkg . --targets node18-${{ matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64' }} --output build/xinbot
+        shell: bash
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: xinbot-${{ matrix.os == 'windows-latest' && 'win' || 'linux' }}
+          path: build/xinbot*
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: xinbot-win
+          path: release/
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: xinbot-linux
+          path: release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
