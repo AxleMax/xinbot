@@ -33,18 +33,23 @@ jobs:
 
       - name: Build Executable
         run: |
-          # 使用 pkg 打包
-          pkg . --targets node18-${{ matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64' }} --output build/xinbot
+          # 构建可执行文件，明确指定输出路径
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            pkg . --targets node18-win-x64 --output build/xinbot.exe
+          else
+            pkg . --targets node18-linux-x64 --output build/xinbot
+          fi
         shell: bash
 
       - name: Compress Executable
         run: |
+          # 根据操作系统选择压缩方式
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
             # Windows 环境压缩为 zip 文件
-            zip -r build/xinbot-win.zip build/xinbot*
+            zip -r build/xinbot-win.zip build/xinbot.exe
           else
             # Linux 环境压缩为 tar.gz 文件
-            tar -czvf build/xinbot-linux.tar.gz -C build xinbot*
+            tar -czvf build/xinbot-linux.tar.gz -C build xinbot
           fi
         shell: bash
 
