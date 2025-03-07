@@ -1,0 +1,24 @@
+{
+    "name": "xinbot",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "description": "",
+    "dependencies": {
+      "mineflayer": "^4.25.0"
+    },
+    "bin": "index.js",
+    "pkg": {
+      "assets": [
+        "!config.json"
+      ],
+      "targets": [
+        "node18-win-x64"
+      ]
+    }
+  }
