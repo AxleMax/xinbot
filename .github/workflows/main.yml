@@ -36,11 +36,24 @@ jobs:
           pkg . --targets node18-${{ matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64' }} --output build/xinbot
         shell: bash
 
+      - name: Compress Executable
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            # Windows 环境压缩为 zip 文件
+            zip -r build/xinbot-win.zip build/xinbot*
+          else
+            # Linux 环境压缩为 tar.gz 文件
+            tar -czvf build/xinbot-linux.tar.gz -C build xinbot*
+          fi
+        shell: bash
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: xinbot-${{ matrix.os == 'windows-latest' && 'win' || 'linux' }}
-          path: build/xinbot*
+          path: |
+            build/xinbot-win.zip
+            build/xinbot-linux.tar.gz
 
   release:
     name: Create GitHub Release
