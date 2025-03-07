@@ -14,11 +14,8 @@
     },
     "bin": "index.js",
     "pkg": {
-      "assets": [
-        "!config.json"
-      ],
-      "targets": [
-        "node18-win-x64"
-      ]
-    }
+        "scripts": "build/",
+        "assets": "config.json",
+        "targets": ["node18-linux-x64", "node18-win-x64"]
+      }
   }
