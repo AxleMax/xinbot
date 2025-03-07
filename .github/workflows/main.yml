@@ -42,6 +42,7 @@ jobs:
           else
             pkg . --targets node18-linux-x64 --output $OUTPUT_DIR/xinbot
           fi
+        shell: bash  
 
       - name: Compress Executable
         run: |
@@ -50,7 +51,7 @@ jobs:
           else
             tar -czvf build/xinbot-linux.tar.gz -C build xinbot
           fi
-
+        shell: bash
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
