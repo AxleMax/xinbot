@@ -68,12 +68,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: release
+          pattern: xinbot-*    # 显式匹配所有相关 artifacts
+          merge-multiple: true # 合并到同一目录
+
+      - name: List Files (调试用)
+        run: ls -R release
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            release/xinbot-win.*
-            release/xinbot-linux.*
+            release/xinbot-win.zip
+            release/xinbot-linux.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.xinbot_TOKEN }}
