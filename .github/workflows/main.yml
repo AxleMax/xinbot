@@ -49,7 +49,7 @@ jobs:
             zip -r build/xinbot-win.zip build/xinbot.exe
           else
             # Linux 环境压缩为 tar.gz 文件
-            tar -czvf build/xinbot-linux.tar.gz -C build xinbot
+            tar -czvf build/xinbot-linux.tar.gz build/xinbot
           fi
         shell: bash
 
