@@ -19,7 +19,7 @@ jobs:
             ext: tar.gz
           - os: windows-latest
             suffix: win
-            ext: exe
+            ext: zip
 
     steps:
       - uses: actions/checkout@v4
